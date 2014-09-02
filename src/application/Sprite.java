@@ -12,20 +12,20 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-	/**
-	 * Date Created: 8/30/2014
-	 * VERSION: 1
-	 * @author Michael Deng
-	 *
-	 */
+/**
+ * Date Created: 8/30/2014
+ * VERSION: 1
+ * @author Michael Deng
+ *
+ */
 public class Sprite{
-	
+
 	private Image standingStill;
 	private Image left;
 	private Image right;
 	private Image shield;
 	private Image milk;
-	
+
 	public Boolean goingLeft = false;
 	public Boolean goingRight = false;
 	public Boolean jump = false;
@@ -33,17 +33,18 @@ public class Sprite{
 	public Boolean hasBeenHit = false;
 	public Boolean resetClicked = false;
 	public Boolean skipLevelClicked = false;
-	
+	public Boolean sprint = false;
+
 	private Group pane;
-	
+
 	private int index;
 	private int level;
-	
+
 	private Label cheatLabel;
 	private Rectangle spriteBody;
-	
+
 	private Cookie collidedWithCookie; 
-	
+
 	/**
 	 * 
 	 * @param Root
@@ -61,20 +62,24 @@ public class Sprite{
 		pane = Root;
 		Root.getChildren().add(spriteBody);
 	}
-	
+
 	/**
 	 * 
 	 * @param scene
 	 */
 	public void updateSprite(Scene scene){
 		activateKeyEvents(scene);
-		if(level == 4) {
-			moveSprite(milk, milk, milk);
+		if (!isCheating){
+			if (level == 4) {
+				moveSprite(milk, milk, milk);
+			} else {
+				moveSprite(left, right, standingStill);
+			}
 		} else {
-			moveSprite(left, right, standingStill);
+			moveSprite(shield, shield, shield);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param scene
@@ -90,6 +95,9 @@ public class Sprite{
 				}
 				if (event.getCode() == KeyCode.SPACE || event.getCode() == KeyCode.UP) {
 					jump = true;
+				}
+				if (event.getCode() == KeyCode.SHIFT){
+					sprint = true;
 				}
 				if (event.getCode() == KeyCode.C) {
 					activateCheatShield();
@@ -114,35 +122,49 @@ public class Sprite{
 				if (event.getCode() == KeyCode.SPACE || event.getCode() == KeyCode.UP) {
 					jump = false;
 				}
+				if (event.getCode() == KeyCode.SHIFT){
+					sprint = false;
+				}
 			}
 		});
 	}
-	
+
 	/**
 	 * 
 	 */
 	public void moveSprite(Image left, Image right, Image standingStill) {
-		if(goingLeft && jump) {
-			if(!isCheating) spriteBody.setFill(new ImagePattern(left));
-			if (spriteBody.getX() >= 0) spriteBody.setX(spriteBody.getX()-3);
-			if (spriteBody.getY() >= 0) spriteBody.setY(spriteBody.getY()-3);
-		} else if (goingRight && jump) {
-			if(!isCheating) spriteBody.setFill(new ImagePattern(right));
-			if (spriteBody.getX() <= 720) spriteBody.setX(spriteBody.getX()+3);
-			if (spriteBody.getY() >= 0) spriteBody.setY(spriteBody.getY()-3);
-		} else if(goingLeft && !jump) {
-			if(!isCheating) spriteBody.setFill(new ImagePattern(left));
-			if (spriteBody.getX() >= 0) spriteBody.setX(spriteBody.getX()-3);
-			if (spriteBody.getY() <= 710) spriteBody.setY(spriteBody.getY()+3);
-		} else if(goingRight && !jump) {
-			if(!isCheating) spriteBody.setFill(new ImagePattern(right));
-			if (spriteBody.getX() <= 720) spriteBody.setX(spriteBody.getX()+3);
-			if (spriteBody.getY() <= 710) spriteBody.setY(spriteBody.getY()+3);
-		} else if(jump) {
-			if (spriteBody.getY() >= 0) spriteBody.setY(spriteBody.getY()-3);
-		} else {
-			if(!isCheating) spriteBody.setFill(new ImagePattern(standingStill));
-			if (spriteBody.getY() <= 710) spriteBody.setY(spriteBody.getY()+3);
+		if(goingLeft) {
+			spriteBody.setFill(new ImagePattern(left));
+			if (sprint) {
+				sprintLeft();
+			} else {
+				moveLeft();
+			}
+			if (jump){
+				jumpUp();
+			} else {
+				fall();
+			}
+		}
+		else if(goingRight) {
+			spriteBody.setFill(new ImagePattern(right));
+			if (sprint) {
+				sprintRight();
+			} else {
+				moveRight();
+			}
+			if (jump){
+				jumpUp();
+			} else {
+				fall();
+			}
+		}
+		else if(jump){
+			jumpUp();
+		}
+		else {
+			spriteBody.setFill(new ImagePattern(standingStill));
+			fall();
 		}
 	}
 	
@@ -160,21 +182,21 @@ public class Sprite{
 			}
 		}
 	}
-	
+
 	/**
 	 * 
 	 */
 	public void activateCheatShield(){
 		if(!isCheating) {
 			isCheating = true;
-			spriteBody.setFill(new ImagePattern(shield));
+			//spriteBody.setFill(new ImagePattern(shield));
 			createLabel("CHEATIN' HARD! SHIELD ON!!", 3, 100, 100, pane);
 		} else {
 			isCheating = false;
 			removeLabel(pane);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param content
@@ -194,14 +216,37 @@ public class Sprite{
 		pane.getChildren().add(cheatLabel);
 		return cheatLabel;
 	}
-	
+
 	/*
 	 * Removes the cheat label from the scene
 	 */
 	public void removeLabel(Group pane) {
 		pane.getChildren().remove(cheatLabel);
 	}
+
+	private void moveLeft(){
+		if (spriteBody.getX() >= 0) spriteBody.setX(spriteBody.getX()-3);
+	}
 	
+	private void moveRight(){
+		if (spriteBody.getX() <= 720) spriteBody.setX(spriteBody.getX()+3);
+	}
+	
+	private void jumpUp(){
+		if (spriteBody.getY() >= 0) spriteBody.setY(spriteBody.getY()-3);
+	}
+	
+	private void fall(){
+		if (spriteBody.getY() <= 710) spriteBody.setY(spriteBody.getY()+3);
+	}
+	
+	private void sprintLeft(){
+		if (spriteBody.getX() >= 0) spriteBody.setX(spriteBody.getX()-6);
+	}
+	
+	private void sprintRight(){
+		if (spriteBody.getX() <= 720) spriteBody.setX(spriteBody.getX()+6);
+	}
 	
 	/**
 	 * Returns where or not the player has been hit
@@ -210,7 +255,7 @@ public class Sprite{
 	public boolean getHasBeenHit(){
 		return hasBeenHit;
 	}
-	
+
 	/**
 	 * Returns whether or not the reset button has been clicked
 	 * @return
@@ -218,7 +263,7 @@ public class Sprite{
 	public boolean getResetClicked(){
 		return resetClicked;
 	}
-	
+
 	/**
 	 * Returns whether or not the skip level button has been clicked
 	 * @return
@@ -226,7 +271,7 @@ public class Sprite{
 	public boolean getSkipLevelClicked(){
 		return skipLevelClicked;
 	}
-	
+
 	/**
 	 * Returns whether or not the player is "cheating" 
 	 * @return
@@ -234,7 +279,7 @@ public class Sprite{
 	public boolean getisCheating(){
 		return isCheating;
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -242,7 +287,7 @@ public class Sprite{
 	public Cookie getCollidedWithCookie(){
 		return collidedWithCookie;
 	}
-	
+
 	/**
 	 * 
 	 * @param bool
