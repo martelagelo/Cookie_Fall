@@ -13,7 +13,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 	/**
-	 * 
+	 * Date Created: 8/30/2014
+	 * VERSION: 1
 	 * @author Michael Deng
 	 *
 	 */

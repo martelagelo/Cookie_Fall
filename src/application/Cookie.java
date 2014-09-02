@@ -8,7 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 /**
- * 
+ * Date Created: 8/30/2014
+ * VERSION: 1
  * @author Michael Deng
  *
  */
