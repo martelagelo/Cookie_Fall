@@ -17,19 +17,21 @@ public class Cookie {
 	
 	private Image cookieImage;
 	public Circle cookieBody;
-	public Integer A;
 	public boolean isFalling;
 	public Random rand;
-	public int Level;
+	public int level;
+	
+	public int cookieID;
+	
 	
 	/**
 	 * 
 	 * @param root
 	 * @param level
 	 */
-	public void populateCookie(Group root, int level){
+	public void populateCookie(Group root, int Level){
 		rand = new Random();
-		Level = level;
+		level = Level;
 		cookieBody = new Circle();
 		cookieBody.setCenterX(rand.nextInt(750));
 		cookieBody.setCenterY(-rand.nextInt(5000));
@@ -40,7 +42,7 @@ public class Cookie {
 	}
 	
 	/**
-	 * 
+	 *True means that the cookie is falling.
 	 */
 	public void activateFallAction(){
 		isFalling = true;
@@ -54,7 +56,7 @@ public class Cookie {
 			activateFallAction();
 		}
 		if (isFalling) {
-			cookieBody.setCenterY(cookieBody.getCenterY() + Level * 2.5);
+			calculateFallSpeed();
 		}
 		if (cookieBody.getCenterY() >= 750) {
 			deactivateFallAction();
@@ -67,8 +69,51 @@ public class Cookie {
 	 */
 	public void deactivateFallAction(){
 		isFalling = false;
-		cookieBody.setCenterX(rand.nextInt(750));
+		calculateCookieXLocation();
 		cookieBody.setCenterY(0);
 	}
+	
+	private void calculateFallSpeed() {
+		if(cookieID < level * 3){
+			cookieBody.setCenterY(cookieBody.getCenterY() + level * 2);
+		}
+		else if (cookieID > level * 6) {
+			cookieBody.setCenterY(cookieBody.getCenterY() + level * 3);
+		}
+		else {
+			cookieBody.setCenterY(cookieBody.getCenterY() + level * 2.5);
+		}
+	}
+	
+	private void calculateCookieXLocation() {
+		if (level == 1) {
+			randomCookiePlacement();
+		} else if (level == 2) {
+			AverageCookiePlacement();
+		} else if (level == 3) {
+			SmartCookiePlacement();
+		} else {
+			AvoidSpriteCookiePlacement();
+		}
+	}
+	
+	private void randomCookiePlacement(){
+		cookieBody.setCenterX(rand.nextInt(750));
+	}
+	
+	private void AverageCookiePlacement(){
+		
+	}
+	
+	private void SmartCookiePlacement(){
+		
+	}
+	
+	private void AvoidSpriteCookiePlacement(){
+		
+	}
 
+	public void setCookieID(int ID){
+		cookieID = ID;
+	}
 }

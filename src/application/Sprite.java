@@ -289,7 +289,7 @@ public class Sprite{
 	}
 
 	/**
-	 * 
+	 * Sets the value of whether or not the player has been hit;
 	 * @param bool
 	 */
 	public void setHasBeenHit(boolean bool){

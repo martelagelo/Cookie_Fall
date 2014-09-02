@@ -29,7 +29,7 @@ import javafx.util.Duration;
 	 */
 class GameLoop {
 
-	private static final Integer SCALAR_MULTIPLIER_SPRITES = 7;		//A constant that acts as a scalar multiplier to generate a certain number of cookies each level.
+	private static final Integer SCALAR_MULTIPLIER_SPRITES = 9;		//A constant that acts as a scalar multiplier to generate a certain number of cookies each level.
 	private static final Integer STARTTIME = 120;					//A constant of two minutes (120 seconds) for each level.
 	private static final Integer LEVEL_FOUR_GOAL = 250;				//The amount of cookies needed to be caught to win level 4.
 	private Integer time_Seconds = STARTTIME;						//A copy of STARTTIME that is changeable.
@@ -91,6 +91,7 @@ class GameLoop {
 		for (int i = 0; i < level * SCALAR_MULTIPLIER_SPRITES ; i++) {
 			cookie = new Cookie();
 			cookie.populateCookie(root, level);
+			cookie.setCookieID(i);
 			cookiesList.add(cookie);
 		}
 		
@@ -240,21 +241,28 @@ class GameLoop {
 		//Pauses the game.
 		notRunning = true;
 		timer_Timeline.stop();
-		//If the 
+		//If the game is succesfully won.
 		if (cookieCounter >= LEVEL_FOUR_GOAL || level >= 5) {
 			Button btnFinishGame = createButton("Congratulations!! You have beaten the game!", 200, 350);
 			activateExitAppButton(btnFinishGame);
-		} else if (cookieCounter <= LEVEL_FOUR_GOAL && time_Seconds <= 0) {
+		}
+		//If the player loses on the 4th level.
+		else if (cookieCounter <= LEVEL_FOUR_GOAL && time_Seconds <= 0) {
 			Button btnRestart = createButton("You didn't get enough cookies... restart?", 200, 350);
 			activateNextLevelButton(btnRestart);
-		} else if (player.getHasBeenHit()) {
+		}
+		//If the player gets hit on the first 3 levels.
+		else if (player.getHasBeenHit()) {
 			Button btnRestart = createButton("You've been hit... restart?", 250, 350);
 			activateNextLevelButton(btnRestart);
-		} else if (time_Seconds <= 0) {
+		}
+		//If the player passes each of the first 3 levels.
+		else if (time_Seconds <= 0) {
 			level++;
 			Button btnNextLevel = createButton("Good Job! Continue?", 280, 350);
 			activateNextLevelButton(btnNextLevel);
-		} else {
+		} 
+		else {
 			if(player.getisCheating()) {
 				level++;
 			}
