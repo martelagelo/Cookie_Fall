@@ -287,6 +287,14 @@ public class Sprite{
 	public Cookie getCollidedWithCookie(){
 		return collidedWithCookie;
 	}
+	
+	public double getSpriteXPosition(){
+		return spriteBody.getX();
+	}
+	
+	public double getSpriteWidth(){
+		return spriteBody.getWidth();
+	}
 
 	/**
 	 * Sets the value of whether or not the player has been hit;

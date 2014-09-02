@@ -90,7 +90,7 @@ class GameLoop {
 		//Creates the cookies and populates the cookie array 
 		for (int i = 0; i < level * SCALAR_MULTIPLIER_SPRITES ; i++) {
 			cookie = new Cookie();
-			cookie.populateCookie(root, level);
+			cookie.populateCookie(root, level, player);
 			cookie.setCookieID(i);
 			cookiesList.add(cookie);
 		}
@@ -101,14 +101,12 @@ class GameLoop {
 
 		//Creates instructions for the game
 		Label instructions = createLabel(
-				"Dodge cookies until 2 minutes are up\n" +
-						"Use the left and right arrow keys to move\n"+
-						"Press up key or the space bar to jump\n"+
-						"Press 'P' to restart the level\n" + 
-						"Press 'S' to skip the current level\n" +
-						"Press 'C' to activate the cheat shield\n" +
-						"Level: " + level, 
-						1, 0
+				"Dodge cookies until 2 minutes are up. Use the left and right arrow keys to move.\n"+
+				"Press up key or the space bar to jump. Press 'P' to restart the level.\n" + 
+				"Press 'S' to skip the current level. Press 'C' to activate the cheat shield.\n" +
+				"Hold 'shift' to have your character sprint.\n" + 
+				"Level: " + level, 
+				1, 0
 				);
 		
 		if (level == 4){

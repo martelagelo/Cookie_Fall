@@ -22,6 +22,7 @@ public class Cookie {
 	public int level;
 	
 	public int cookieID;
+	private Sprite player;
 	
 	
 	/**
@@ -29,9 +30,10 @@ public class Cookie {
 	 * @param root
 	 * @param level
 	 */
-	public void populateCookie(Group root, int Level){
+	public void populateCookie(Group root, int Level, Sprite sprite){
 		rand = new Random();
 		level = Level;
+		player = sprite;
 		cookieBody = new Circle();
 		cookieBody.setCenterX(rand.nextInt(750));
 		cookieBody.setCenterY(-rand.nextInt(5000));
@@ -75,10 +77,10 @@ public class Cookie {
 	
 	private void calculateFallSpeed() {
 		if(cookieID < level * 3){
-			cookieBody.setCenterY(cookieBody.getCenterY() + level * 2);
+			cookieBody.setCenterY(cookieBody.getCenterY() + level * 3);
 		}
 		else if (cookieID > level * 6) {
-			cookieBody.setCenterY(cookieBody.getCenterY() + level * 3);
+			cookieBody.setCenterY(cookieBody.getCenterY() + level * 2);
 		}
 		else {
 			cookieBody.setCenterY(cookieBody.getCenterY() + level * 2.5);
@@ -102,15 +104,48 @@ public class Cookie {
 	}
 	
 	private void AverageCookiePlacement(){
-		
+		if (cookieID == 1) {
+			cookieBody.setCenterX(player.getSpriteXPosition());
+		}
+		else if (cookieID == 2) {
+			cookieBody.setCenterX(player.getSpriteXPosition() + 35);
+		}
+		else if (cookieID == 3) {
+			cookieBody.setCenterX(player.getSpriteXPosition() - 25);
+		}
+		else {
+			randomCookiePlacement();
+		}
 	}
 	
 	private void SmartCookiePlacement(){
-		
+		if (cookieID == 4) {
+			cookieBody.setCenterX(player.getSpriteXPosition() + 3*player.getSpriteWidth());
+		}
+		else if (cookieID == 5) {
+			cookieBody.setCenterX(player.getSpriteXPosition() - 3*player.getSpriteWidth());
+		}
+		else if (cookieID == 6) {
+			cookieBody.setCenterX(20);
+		}
+		else if (cookieID == 7) {
+			cookieBody.setCenterX(730);
+		}
+		else {
+			AverageCookiePlacement();
+		}
 	}
 	
 	private void AvoidSpriteCookiePlacement(){
-		
+		if (cookieID < level * 2){
+			cookieBody.setCenterX(player.getSpriteXPosition() + 7*player.getSpriteWidth());
+		}
+		else if (cookieID < level * 4) {
+			cookieBody.setCenterX(player.getSpriteXPosition() - 7*player.getSpriteWidth());
+		}
+		else {
+			randomCookiePlacement();
+		}
 	}
 
 	public void setCookieID(int ID){
