@@ -20,30 +20,29 @@ import javafx.scene.shape.Rectangle;
  */
 public class Sprite{
 
-	private Image standingStill;
-	private Image left;
-	private Image right;
-	private Image shield;
-	private Image milk;
+	private Image standingStill;							//An image of the sprite when its not moving.
+	private Image left;										//An image of the sprite moving left.
+	private Image right;									//An image of the sprite moving right.
+	private Image shield;									//An image of a shield.
+	private Image milk;										//An image of a boy holding a glass of milk.
 
-	public Boolean goingLeft = false;
-	public Boolean goingRight = false;
-	public Boolean jump = false;
-	public Boolean isCheating = false;
-	public Boolean hasBeenHit = false;
-	public Boolean resetClicked = false;
-	public Boolean skipLevelClicked = false;
-	public Boolean sprint = false;
+	public Boolean goingLeft = false;						//True if the sprite is moving left.
+	public Boolean goingRight = false;						//True if the sprite is moving right.
+	public Boolean jump = false;							//True if the sprite is moving up.
+	public Boolean isCheating = false;						//True if a cheat is currently being used.
+	public Boolean hasBeenHit = false;						//True if the sprite is hit by a cookie.
+	public Boolean resetClicked = false;					//True if the level has been reset.
+	public Boolean skipLevelClicked = false;				//True if a level is skipped.
+	public Boolean sprint = false;							//True if the sprite is sprinting.
 
-	private Group pane;
+	private Group pane;										//The current group being used by the application.
 
-	private int index;
-	private int level;
+	private int level;										//The current game level
 
-	private Label cheatLabel;
-	private Rectangle spriteBody;
+	private Label cheatLabel;								//The label that lets the player know when a cheat is being used.
+	private Rectangle spriteBody;							//The rectangle that represents the sprite.
 
-	private Cookie collidedWithCookie; 
+	private Cookie collidedWithCookie; 						//The cookie the player collides with.
 
 	/**
 	 * 
@@ -65,7 +64,7 @@ public class Sprite{
 
 	/**
 	 * 
-	 * @param scene
+	 * @param scene: The current scene the game takes place in.
 	 */
 	public void updateSprite(Scene scene){
 		activateKeyEvents(scene);
@@ -81,8 +80,8 @@ public class Sprite{
 	}
 
 	/**
-	 * 
-	 * @param scene
+	 * Activates all the needed key commands to allow for game play.
+	 * @param scene: The current scene the game takes place in. 
 	 */
 	public void activateKeyEvents(Scene scene) {
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -130,7 +129,7 @@ public class Sprite{
 	}
 
 	/**
-	 * 
+	 * Moves the sprite according to what commands hav been issued by the player.
 	 */
 	public void moveSprite(Image left, Image right, Image standingStill) {
 		if(goingLeft) {
@@ -169,8 +168,8 @@ public class Sprite{
 	}
 	
 	/**
-	 * 
-	 * @param cookie
+	 * Handles a collision with a cookie depending on the level.
+	 * @param cookie: The cookie the player collides with.
 	 */
 	public void handleCookieCollision(Cookie cookie){
 		if (spriteBody.intersects(cookie.cookieBody.getLayoutBounds())) {
@@ -184,7 +183,7 @@ public class Sprite{
 	}
 
 	/**
-	 * 
+	 * Activates the CheatShield, which does not allow for collisions.
 	 */
 	public void activateCheatShield(){
 		if(!isCheating) {
@@ -197,12 +196,12 @@ public class Sprite{
 	}
 
 	/**
-	 * 
-	 * @param content
-	 * @param font_size
-	 * @param x_pos_shift
-	 * @param y_pos_shift
-	 * @param pane
+	 * Creates a label.
+	 * @param content: The physical message of the label.
+	 * @param font_size: The size of the font.
+	 * @param x_pos_shift: The amount the label is shifted to the right.
+	 * @param y_pos_shift: The amount the label is shifted down:
+	 * @param pane: The current group the scene is using.
 	 * @return
 	 */
 	public Label createLabel(String content, int font_size, int x_pos_shift, int y_pos_shift, Group pane){
@@ -216,33 +215,51 @@ public class Sprite{
 		return cheatLabel;
 	}
 
-	/*
+	/**
 	 * Removes the cheat label from the scene
 	 */
 	public void removeLabel(Group pane) {
 		pane.getChildren().remove(cheatLabel);
 	}
-
+	
+	/**
+	 * Has the sprite move left 3 pixels per frame.
+	 */
 	private void moveLeft(){
 		if (spriteBody.getX() >= 0) spriteBody.setX(spriteBody.getX()-3);
 	}
 	
+	/**
+	 * Has the sprite move right 3 pixels per frame.
+	 */
 	private void moveRight(){
 		if (spriteBody.getX() <= 720) spriteBody.setX(spriteBody.getX()+3);
 	}
 	
+	/**
+	 * Has the sprite move up 3 pixels per frame.
+	 */
 	private void jumpUp(){
 		if (spriteBody.getY() >= 0) spriteBody.setY(spriteBody.getY()-3);
 	}
 	
+	/**
+	 * Has the sprite move down 3 pixels per frame.
+	 */
 	private void fall(){
 		if (spriteBody.getY() <= 710) spriteBody.setY(spriteBody.getY()+3);
 	}
 	
+	/**
+	 * Has the sprite move left 6 pixels per frame.
+	 */
 	private void sprintLeft(){
 		if (spriteBody.getX() >= 0) spriteBody.setX(spriteBody.getX()-6);
 	}
 	
+	/**
+	 * Has the sprite move right 6 pixels per frame.
+	 */
 	private void sprintRight(){
 		if (spriteBody.getX() <= 720) spriteBody.setX(spriteBody.getX()+6);
 	}
