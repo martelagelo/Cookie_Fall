@@ -138,32 +138,34 @@ class GameLoop {
 		//Only run updateSprites if the game is not paused.
 		if(!notRunning){
 			player.updateSprite(myScene);
-		
-			for (int i = 0; i < level * SCALAR_MULTIPLIER_SPRITES; i++) {
-				cookie = cookiesList.get(i);
-				cookie.runFallAction();
-				player.handleCookieCollision(cookie);
-			}
+			updateCookies();
+			checkForGameInterrupts();
+		}
+	}
+	
+	private void updateCookies(){
+		for (int i = 0; i < level * SCALAR_MULTIPLIER_SPRITES; i++) {
+			cookie = cookiesList.get(i);
+			cookie.runFallAction();
+			player.handleCookieCollision(cookie);
+		}
+	}
+	
+	private void checkForGameInterrupts(){
+		//Pauses the game is the player is hit by a cookie, if the resets the level, if the player skips the level, or if the player beats level 4.
+		if ((player.getHasBeenHit() && level !=4) || player.getResetClicked() || player.getSkipLevelClicked() || cookieCounter >= LEVEL_FOUR_GOAL) {
+			stopGame();
+		} 
+		//Updates the cookie counter if is level 4 and the sprite has been hit by a cookie.
+		else if(level == 4 && player.getHasBeenHit()) {
+			cookieCounter++;
 			
-			//Pauses the game is the player is hit by a cookie, of the resets the level, or of the player skips the level.
-			if ((player.getHasBeenHit() && level !=4) || player.getResetClicked() || player.getSkipLevelClicked()) {
-				stopGame();
-			} 
-			//Updates the cookie counter if is level 4 and the sprite has been hit by a cookie.
-			else if(level == 4 && player.getHasBeenHit()) {
-				cookieCounter++;
-				
-				//Prevents cookie counter from being incorrectly incremented due to continued contact with the cookie.
-				player.setHasBeenHit(false);
-				
-				//Sends a cookie that has collided with the sprite back to the top of the screen.
-				player.getCollidedWithCookie().deactivateFallAction();
-				cookieCounterLabel.setText(""+cookieCounter);
-			}
-			//Pauses the game if the required number of cookies are collected in level 4.
-			if (cookieCounter >= LEVEL_FOUR_GOAL) {
-				stopGame();
-			}
+			//Prevents cookie counter from being incorrectly incremented due to continued contact with the cookie.
+			player.setHasBeenHit(false);
+			
+			//Sends a cookie that has collided with the sprite back to the top of the screen.
+			player.getCollidedWithCookie().deactivateFallAction();
+			cookieCounterLabel.setText(""+cookieCounter);
 		}
 	}
 	

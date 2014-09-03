@@ -15,13 +15,20 @@ import javafx.scene.shape.Circle;
  */
 public class Cookie {
 	
+	private static final Integer SLOW_SPEED = 2;						
+	private static final Double AVG_SPEED = 2.5;
+	private static final Integer FAST_SPEED = 3;
+	
+	private static final Integer STAGE_WIDTH = 750;						//The pixel width of the application
+	private static final Integer STAGE_HEIGHT = STAGE_WIDTH;			//The pixel height of the application
+	
 	private Image cookieImage;				//The image of the cookie.
 	public Circle cookieBody;				//The rectangle that represents the cookie.
 	public boolean isFalling;				//True means the cookie is falling.
 	public Random rand;						//A random number generator. Used to determine where cookies fall from.
 	public int level;						//The current game level.
 	
-	public int cookieID;					//The index of the cookie in the cookie array.
+	private int cookieID;					//The index of the cookie in the cookie array.
 	private Sprite player;					//The sprite the player controls.
 	
 	
@@ -36,7 +43,7 @@ public class Cookie {
 		level = Level;
 		player = sprite;
 		cookieBody = new Circle();
-		cookieBody.setCenterX(rand.nextInt(750));
+		cookieBody.setCenterX(rand.nextInt(STAGE_WIDTH));
 		cookieBody.setCenterY(-rand.nextInt(5000));
 		cookieBody.setRadius(20);
 		cookieImage = new Image(getClass().getResourceAsStream("minecraft_cookie.png"));
@@ -61,7 +68,7 @@ public class Cookie {
 		if (isFalling) {
 			calculateFallSpeed();
 		}
-		if (cookieBody.getCenterY() >= 750) {
+		if (cookieBody.getCenterY() >= STAGE_HEIGHT) {
 			deactivateFallAction();
 		}
 	}
@@ -80,13 +87,13 @@ public class Cookie {
 	 */
 	private void calculateFallSpeed() {
 		if(cookieID < level * 3){
-			cookieBody.setCenterY(cookieBody.getCenterY() + level * 3);
+			cookieBody.setCenterY(cookieBody.getCenterY() + level * FAST_SPEED);
 		}
 		else if (cookieID > level * 6) {
-			cookieBody.setCenterY(cookieBody.getCenterY() + level * 2);
+			cookieBody.setCenterY(cookieBody.getCenterY() + level * SLOW_SPEED);
 		}
 		else {
-			cookieBody.setCenterY(cookieBody.getCenterY() + level * 2.5);
+			cookieBody.setCenterY(cookieBody.getCenterY() + level * AVG_SPEED);
 		}
 	}
 	
@@ -109,7 +116,7 @@ public class Cookie {
 	 * Makes cookies fall from random x values.
 	 */
 	private void randomCookiePlacement(){
-		cookieBody.setCenterX(rand.nextInt(750));
+		cookieBody.setCenterX(rand.nextInt(STAGE_WIDTH));
 	}
 	
 	/**
@@ -148,7 +155,7 @@ public class Cookie {
 			cookieBody.setCenterX(20);
 		}
 		else if (cookieID == 7) {
-			cookieBody.setCenterX(730);
+			cookieBody.setCenterX(STAGE_WIDTH - 20);
 		}
 		else {
 			AverageCookiePlacement();

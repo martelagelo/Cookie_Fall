@@ -45,9 +45,9 @@ public class Sprite{
 	private Cookie collidedWithCookie; 						//The cookie the player collides with.
 
 	/**
-	 * 
-	 * @param Root
-	 * @param Level
+	 * Populates the information for the sprite.
+	 * @param Root: the current group the scene utilizes.
+	 * @param Level: The current level of the game.
 	 */
 	public void populateSprite(Group Root, int Level){
 		level = Level;
@@ -63,7 +63,7 @@ public class Sprite{
 	}
 
 	/**
-	 * 
+	 * Updates the sprite per frame. 
 	 * @param scene: The current scene the game takes place in.
 	 */
 	public void updateSprite(Scene scene){
@@ -133,7 +133,7 @@ public class Sprite{
 	 */
 	public void moveSprite(Image left, Image right, Image standingStill) {
 		if(goingLeft) {
-			spriteBody.setFill(new ImagePattern(left));
+			setSpriteImage(left);
 			if (sprint) {
 				sprintLeft();
 			} else {
@@ -146,7 +146,7 @@ public class Sprite{
 			}
 		}
 		else if(goingRight) {
-			spriteBody.setFill(new ImagePattern(right));
+			setSpriteImage(right);
 			if (sprint) {
 				sprintRight();
 			} else {
@@ -162,7 +162,7 @@ public class Sprite{
 			jumpUp();
 		}
 		else {
-			spriteBody.setFill(new ImagePattern(standingStill));
+			setSpriteImage(standingStill);
 			fall();
 		}
 	}
@@ -204,7 +204,7 @@ public class Sprite{
 	 * @param pane: The current group the scene is using.
 	 * @return
 	 */
-	public Label createLabel(String content, int font_size, int x_pos_shift, int y_pos_shift, Group pane){
+	private Label createLabel(String content, int font_size, int x_pos_shift, int y_pos_shift, Group pane){
 		cheatLabel = new Label();
 		cheatLabel.setText(content);
 		cheatLabel.setStyle("-fx-font-size: "+font_size+"em;");
@@ -214,7 +214,15 @@ public class Sprite{
 		pane.getChildren().add(cheatLabel);
 		return cheatLabel;
 	}
-
+	
+	/**
+	 * Sets the image of the sprite.
+	 * @param image: The new image.
+	 */
+	private void setSpriteImage(Image image) {
+		spriteBody.setFill(new ImagePattern(image));
+	}
+	
 	/**
 	 * Removes the cheat label from the scene
 	 */
