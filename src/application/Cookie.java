@@ -15,20 +15,21 @@ import javafx.scene.shape.Circle;
  */
 public class Cookie {
 	
-	private Image cookieImage;
-	public Circle cookieBody;
-	public boolean isFalling;
-	public Random rand;
-	public int level;
+	private Image cookieImage;				//The image of the cookie.
+	public Circle cookieBody;				//The rectangle that represents the cookie.
+	public boolean isFalling;				//True means the cookie is falling.
+	public Random rand;						//A random number generator. Used to determine where cookies fall from.
+	public int level;						//The current game level.
 	
-	public int cookieID;
-	private Sprite player;
+	public int cookieID;					//The index of the cookie in the cookie array.
+	private Sprite player;					//The sprite the player controls.
 	
 	
 	/**
-	 * 
-	 * @param root
-	 * @param level
+	 * Populates all the initial parameters for a cookie.
+	 * @param root: The current group the scene is utilizing.
+	 * @param level: The current game level.
+	 * @param sprite: The player.
 	 */
 	public void populateCookie(Group root, int Level, Sprite sprite){
 		rand = new Random();
@@ -44,14 +45,14 @@ public class Cookie {
 	}
 	
 	/**
-	 *True means that the cookie is falling.
+	 * True means that the cookie is falling.
 	 */
 	public void activateFallAction(){
 		isFalling = true;
 	}
 	
 	/**
-	 * 
+	 * The main controller for how cookies fall.
 	 */
 	public void runFallAction(){
 		if (cookieBody.getCenterY() <= 0) {
@@ -66,8 +67,7 @@ public class Cookie {
 	}
 	
 	/**
-	 * 
-	 * @param cBody
+	 * Stops the cookie from falling and brings it back to the top of the screen.
 	 */
 	public void deactivateFallAction(){
 		isFalling = false;
@@ -75,6 +75,9 @@ public class Cookie {
 		cookieBody.setCenterY(0);
 	}
 	
+	/**
+	 * Calculates the speed at which cookies fall based on current game level.
+	 */
 	private void calculateFallSpeed() {
 		if(cookieID < level * 3){
 			cookieBody.setCenterY(cookieBody.getCenterY() + level * 3);
@@ -87,6 +90,9 @@ public class Cookie {
 		}
 	}
 	
+	/**
+	 * Determines how "intelligently" cookies fall based off of the current game level.
+	 */
 	private void calculateCookieXLocation() {
 		if (level == 1) {
 			randomCookiePlacement();
@@ -99,10 +105,17 @@ public class Cookie {
 		}
 	}
 	
+	/**
+	 * Makes cookies fall from random x values.
+	 */
 	private void randomCookiePlacement(){
 		cookieBody.setCenterX(rand.nextInt(750));
 	}
 	
+	/**
+	 * Makes some cookies fall directly on the player.
+	 * Makes the rest fall randomly.
+	 */
 	private void AverageCookiePlacement(){
 		if (cookieID == 1) {
 			cookieBody.setCenterX(player.getSpriteXPosition());
@@ -118,6 +131,12 @@ public class Cookie {
 		}
 	}
 	
+	/**
+	 * Makes some cookies fall directly on the player.
+	 * Makes other cookies fall a little bit behind and in front of the player.
+	 * Drops cookies on the edges of the screen.
+	 * Makes the rest fall randomly.
+	 */
 	private void SmartCookiePlacement(){
 		if (cookieID == 4) {
 			cookieBody.setCenterX(player.getSpriteXPosition() + 3*player.getSpriteWidth());
@@ -136,6 +155,10 @@ public class Cookie {
 		}
 	}
 	
+	/**
+	 * Makes some of the cookies purposefully avoid the player for level 4.
+	 * The rest of the cookies fall randomly.
+	 */
 	private void AvoidSpriteCookiePlacement(){
 		if (cookieID < level * 2){
 			cookieBody.setCenterX(player.getSpriteXPosition() + 7*player.getSpriteWidth());
@@ -147,7 +170,11 @@ public class Cookie {
 			randomCookiePlacement();
 		}
 	}
-
+	
+	/**
+	 * Grabs the ID of the cookie.
+	 * @param ID: The index of the cookie in the cookie array.
+	 */
 	public void setCookieID(int ID){
 		cookieID = ID;
 	}

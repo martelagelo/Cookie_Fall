@@ -189,7 +189,6 @@ public class Sprite{
 	public void activateCheatShield(){
 		if(!isCheating) {
 			isCheating = true;
-			//spriteBody.setFill(new ImagePattern(shield));
 			createLabel("CHEATIN' HARD! SHIELD ON!!", 3, 100, 100, pane);
 		} else {
 			isCheating = false;
@@ -249,32 +248,32 @@ public class Sprite{
 	}
 	
 	/**
-	 * Returns where or not the player has been hit
-	 * @return
+	 * 
+	 * @return: Returns where or not the player has been hit.
 	 */
 	public boolean getHasBeenHit(){
 		return hasBeenHit;
 	}
 
 	/**
-	 * Returns whether or not the reset button has been clicked
-	 * @return
+	 * 
+	 * @return: Returns whether or not the reset button has been clicked.
 	 */
 	public boolean getResetClicked(){
 		return resetClicked;
 	}
 
 	/**
-	 * Returns whether or not the skip level button has been clicked
-	 * @return
+	 *
+	 * @return: Returns whether or not the skip level button has been clicked.
 	 */
 	public boolean getSkipLevelClicked(){
 		return skipLevelClicked;
 	}
 
 	/**
-	 * Returns whether or not the player is "cheating" 
-	 * @return
+	 *
+	 * @return: Returns whether or not the player is "cheating". 
 	 */
 	public boolean getisCheating(){
 		return isCheating;
@@ -282,23 +281,31 @@ public class Sprite{
 
 	/**
 	 * 
-	 * @return
+	 * @return: Returns the cookie the player collided with.
 	 */
 	public Cookie getCollidedWithCookie(){
 		return collidedWithCookie;
 	}
 	
+	/**
+	 * 
+	 * @return: Returns the horizontal position of the top right corner of the sprite.
+	 */
 	public double getSpriteXPosition(){
 		return spriteBody.getX();
 	}
 	
+	/**
+	 * 
+	 * @return: Returns the pixel width of the sprite.
+	 */
 	public double getSpriteWidth(){
 		return spriteBody.getWidth();
 	}
 
 	/**
 	 * Sets the value of whether or not the player has been hit;
-	 * @param bool
+	 * @param bool: True if the player has been hit.
 	 */
 	public void setHasBeenHit(boolean bool){
 		hasBeenHit = bool;
