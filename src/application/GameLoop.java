@@ -1,5 +1,6 @@
 package application;
 
+import java.net.URL;
 import java.util.ArrayList;
 
 import javafx.animation.KeyFrame;
@@ -16,17 +17,19 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-	/**
-	 * Date Created: 8/30/2014
-	 * VERSION: 2
-	 * @author Michael Deng
-	 *
-	 */
+/**
+ * Date Created: 8/30/2014
+ * VERSION: 2
+ * @author Michael Deng
+ *
+ */
 class GameLoop {
 
 	private static final Integer SCALAR_MULTIPLIER_SPRITES = 9;		//A constant that acts as a scalar multiplier to generate a certain number of cookies each level.
@@ -40,15 +43,17 @@ class GameLoop {
 	private Timeline timer_Timeline;								//The timeline for the count down timer.
 	private Label timer;											//The timer display.
 	private Label cookieCounterLabel;								//A display that shows how many cookies have been caught in level 4.
-	
+
 	private Boolean notRunning;										//True if game play is paused.
 
 	private Stage stage;											//The application's user window.
 	private Group root;												
 	private Scene myScene;											//The application's user interface.
-	
+
 	private int level = 1;											//The current level of the game play.
 	private int cookieCounter = 0;									//The number of cookies caught in level 4.
+	
+	private MediaPlayer mediaPlayer;
 
 	/**
 	 *  Function to do each game frame.
@@ -69,7 +74,7 @@ class GameLoop {
 	 * @return: Returns the scene in which the game occurs.
 	 */
 	public Scene init(Stage s, int width, int height) {
-		
+
 		stage = s;
 		// Create a scene graph to organize the scene.
 		root = new Group();
@@ -80,7 +85,7 @@ class GameLoop {
 
 		//Sets the application to a running state.
 		notRunning = false;
-		
+
 		//Initializes sprite and populates its characteristics.
 		player = new Sprite();
 		player.populateSprite(root, level);
@@ -94,7 +99,7 @@ class GameLoop {
 			cookie.setCookieID(i);
 			cookiesList.add(cookie);
 		}
-		
+
 		//Initializes and starts the count down timer
 		timer = initializeCountDownTimer(root);
 		activateTimer(timer);
@@ -102,13 +107,13 @@ class GameLoop {
 		//Creates instructions for the game
 		Label instructions = createLabel(
 				"Dodge cookies until 2 minutes are up. Use the left and right arrow keys to move.\n"+
-				"Press up key or the space bar to jump. Press 'P' to restart the level.\n" + 
-				"Press 'S' to skip the current level. Press 'C' to activate the cheat shield.\n" +
-				"Hold 'shift' to have your character sprint.\n" + 
-				"Level: " + level, 
-				1, 0
+						"Press up key or the space bar to jump. Press 'P' to restart the level.\n" + 
+						"Press 'S' to skip the current level. Press 'C' to activate the cheat shield.\n" +
+						"Hold 'shift' to have your character sprint.\n" + 
+						"Level: " + level, 
+						1, 0
 				);
-		
+
 		if (level == 4){
 			//Adds and removes labels specific to level 4;
 			editSceneForLevelFour(instructions);
@@ -118,6 +123,8 @@ class GameLoop {
 			stopGame();
 		}
 		
+		playSong();
+
 		return myScene;
 	}
 
@@ -142,7 +149,7 @@ class GameLoop {
 			checkForGameInterrupts();
 		}
 	}
-	
+
 	private void updateCookies(){
 		for (int i = 0; i < level * SCALAR_MULTIPLIER_SPRITES; i++) {
 			cookie = cookiesList.get(i);
@@ -150,7 +157,7 @@ class GameLoop {
 			player.handleCookieCollision(cookie);
 		}
 	}
-	
+
 	private void checkForGameInterrupts(){
 		//Pauses the game is the player is hit by a cookie, if the resets the level, if the player skips the level, or if the player beats level 4.
 		if ((player.getHasBeenHit() && level !=4) || player.getResetClicked() || player.getSkipLevelClicked() || cookieCounter >= LEVEL_FOUR_GOAL) {
@@ -159,29 +166,29 @@ class GameLoop {
 		//Updates the cookie counter if is level 4 and the sprite has been hit by a cookie.
 		else if(level == 4 && player.getHasBeenHit()) {
 			cookieCounter++;
-			
+
 			//Prevents cookie counter from being incorrectly incremented due to continued contact with the cookie.
 			player.setHasBeenHit(false);
-			
+
 			//Sends a cookie that has collided with the sprite back to the top of the screen.
 			player.getCollidedWithCookie().deactivateFallAction();
 			cookieCounterLabel.setText(""+cookieCounter);
 		}
 	}
-	
+
 	/**
 	 * Initializes and starts running the count down timer.
 	 * @param label: The display for the count down timer.
 	 */
 	private void activateTimer(Label label) {
-		
+
 		//Just in cause the timer is already running, stop it.
 		if (timer_Timeline != null) {
 			timer_Timeline.stop();
 		}
 		timer_Timeline = new Timeline();
 		timer_Timeline.setCycleCount(Timeline.INDEFINITE);
-		
+
 		//Creates a keyFrame per second.
 		timer_Timeline.getKeyFrames().add(
 				new KeyFrame(Duration.seconds(1),
@@ -189,10 +196,10 @@ class GameLoop {
 					public void handle(ActionEvent event) {
 						//Decrements the timer by 1 per second.
 						time_Seconds--;
-						
+
 						//Updates the timer display
 						label.setText(time_Seconds.toString());
-						
+
 						//Pauses the game when the timer reach zero.
 						if (time_Seconds <= 0) {
 							stopGame();
@@ -201,7 +208,7 @@ class GameLoop {
 				}));
 		timer_Timeline.play();
 	}
-	
+
 	/**
 	 * Creates the count down timer display for the game.
 	 * @param pane: The group the new label will belong to.
@@ -216,7 +223,7 @@ class GameLoop {
 		pane.getChildren().add(label);
 		return label;
 	}
-	
+
 	/**
 	 * Creates a label.
 	 * @param content: What the label says.
@@ -233,13 +240,14 @@ class GameLoop {
 		root.getChildren().add(label);
 		return label;
 	}
-	
+
 	/**
 	 * Either restarts a game level or progresses to the next level depending on what situation occurs.
 	 */
 	public void stopGame(){
 		//Pauses the game.
 		notRunning = true;
+		pauseSong();
 		timer_Timeline.stop();
 		//If the game is succesfully won.
 		if (cookieCounter >= LEVEL_FOUR_GOAL || level >= 5) {
@@ -270,7 +278,7 @@ class GameLoop {
 		}
 		time_Seconds = STARTTIME;
 	}
-	
+
 	/**
 	 * Creates a button.
 	 * @param content: What the button says.
@@ -287,7 +295,7 @@ class GameLoop {
 		root.getChildren().add(btn);
 		return btn;
 	}
-	
+
 	/**
 	 * Creates an event handler that refreshes the game's scene when the event is fired.
 	 * @param btn: The button that activates the event.
@@ -300,7 +308,7 @@ class GameLoop {
 			}
 		});
 	}
-	
+
 	/**
 	 *Creates an event handler that exits the application when the event is fireda.
 	 * @param btn: The button that activates the event.
@@ -313,7 +321,7 @@ class GameLoop {
 			}
 		});
 	}
-	
+
 	/**
 	 *Refreshes the games play's scene.
 	 */
@@ -322,7 +330,7 @@ class GameLoop {
 		stage.setScene(scene);
 		stage.show();
 	}
-	
+
 	/**
 	 * Creates and removes the labels specifically needed for level 4.
 	 * @param instructions: The instructions display.
@@ -331,6 +339,17 @@ class GameLoop {
 		root.getChildren().remove(root.getChildren().lastIndexOf(instructions));
 		Label levelFourLabel = createLabel("NOW CATCH AS MANY\nCOOKIES AS YOU CAN!!", 3, 0);
 		cookieCounterLabel = createLabel(""+cookieCounter, 3, 500);
+	}
+	
+	private void playSong(){
+		URL resource = getClass().getResource("Nyan_Cat_original.mp3");
+        Media media = new Media(resource.toString());
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
+	}
+	
+	private void pauseSong(){
+		mediaPlayer.pause();
 	}
 }
 
