@@ -76,17 +76,15 @@ class GameLoop {
 	public Scene init(Stage s, int width, int height) {
 
 		stage = s;
-		// Create a scene graph to organize the scene.
 		root = new Group();
-		// Create a place to see the shapes.
 		myScene = new Scene(root, width, height, Color.WHITE);
+		
 		//Initializes the timeline for the timer.
 		timer_Timeline = new Timeline();
 
 		//Sets the application to a running state.
 		notRunning = false;
 
-		//Initializes sprite and populates its characteristics.
 		player = new Sprite();
 		player.populateSprite(root, level);
 
@@ -149,7 +147,10 @@ class GameLoop {
 			checkForGameInterrupts();
 		}
 	}
-
+	
+	/**
+	 * Updates the status of the cookies depending on how they interact with the sprite.
+	 */
 	private void updateCookies(){
 		for (int i = 0; i < level * SCALAR_MULTIPLIER_SPRITES; i++) {
 			cookie = cookiesList.get(i);
@@ -158,6 +159,9 @@ class GameLoop {
 		}
 	}
 
+	/**
+	 * Checks to see if any user interaction or game event merits a game pause
+	 */
 	private void checkForGameInterrupts(){
 		//Pauses the game is the player is hit by a cookie, if the resets the level, if the player skips the level, or if the player beats level 4.
 		if ((player.getHasBeenHit() && level !=4) || player.getResetClicked() || player.getSkipLevelClicked() || cookieCounter >= LEVEL_FOUR_GOAL) {
@@ -341,6 +345,9 @@ class GameLoop {
 		cookieCounterLabel = createLabel(""+cookieCounter, 3, 500);
 	}
 	
+	/**
+	 * Plays a song for the application.
+	 */
 	private void playSong(){
 		URL resource = getClass().getResource("Nyan_Cat_original.mp3");
         Media media = new Media(resource.toString());
@@ -348,6 +355,9 @@ class GameLoop {
         mediaPlayer.play();
 	}
 	
+	/**
+	 * Pauses the song.
+	 */
 	private void pauseSong(){
 		mediaPlayer.pause();
 	}

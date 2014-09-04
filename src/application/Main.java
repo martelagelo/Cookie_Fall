@@ -42,8 +42,6 @@ public class Main extends Application {
 		Pane root = new Pane();
 		Scene scene = new Scene(root, 750, 750);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-		//root.setStyle("-fx-background-image: url('minecraft_cookie.png'); -fx-background-color: #996633;");
-		//root.setBackground(new Background(new BackgroundImage(cookieImage, null, null, null, null)));
 		
 		Button btnStart = createButton("Start Game", 50, 500, root);
 		activateStartButton(btnStart);

@@ -2,6 +2,7 @@ package application;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.geometry.BoundingBox;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -172,7 +173,7 @@ public class Sprite{
 	 * @param cookie: The cookie the player collides with.
 	 */
 	public void handleCookieCollision(Cookie cookie){
-		if (spriteBody.intersects(cookie.cookieBody.getLayoutBounds())) {
+		if (cookie.cookieBody.intersects(getSpriteBoundingBox())) {
 			if(!isCheating) {
 				hasBeenHit = true;
 			} 
@@ -213,6 +214,26 @@ public class Sprite{
 		cheatLabel.setTextFill(Color.BLACK);
 		pane.getChildren().add(cheatLabel);
 		return cheatLabel;
+	}
+	
+	private BoundingBox getSpriteBoundingBox(){
+		return new BoundingBox(getBoundMinX(), getBoundMinY(), getBoundWidth(), getBoundHeight());
+	}
+	
+	private double getBoundWidth(){
+		return spriteBody.getWidth() - 10;
+	}
+	
+	private double getBoundHeight(){
+		return spriteBody.getHeight() - 10;
+	}
+	
+	private double getBoundMinX(){
+		return spriteBody.getX() + 10;
+	}
+	
+	private double getBoundMinY(){
+		return spriteBody.getY() + 10;
 	}
 	
 	/**
