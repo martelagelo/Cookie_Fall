@@ -15,3 +15,7 @@ The player is a human stuck in a world of falling cookies. The player can move l
 
 ##Level and mode differences: 
 There will be 4 levels to my game and the first 3 levels will be differentiated by the difficulty in avoiding falling cookies. In each level, the parameters that will change are as follows: the number of falling cookies, the speed at which the cookies fall, and the intelligence of the falling cookies. The first two parameters are self-explanatory, but what I mean for the last parameter is how well the cookies can predict the player’s next move. If all the cookies simply fall on the current position of the player, than the game would be easy because one would simply have to evacuate their current position. By having cookies fall not only on the player’s position, but also in front of them, behind them, and at random positions, the game becomes many times more difficult. For the last level, instead of having to avoid the cookies, the player will have to catch them. And instead of trying to catch the player, the cookies will not be programmed differently to avoid the player. They will be more frequent and quicker than the cookies in the 3rd level.
+
+##Cheats:
+Press 'c' to activate the shield cheat, which allows cookies to pass through the sprite without activating the hit event.
+Press 's' to skip a level.

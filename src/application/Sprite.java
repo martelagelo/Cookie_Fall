@@ -13,47 +13,54 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+
 /**
- * Date Created: 8/30/2014
- * VERSION: 1
+ * Date Created: 8/30/2014 VERSION: 1
+ * 
  * @author Michael Deng
  *
  */
-public class Sprite{
+public class Sprite {
 
-	private Image standingStill;							//An image of the sprite when its not moving.
-	private Image left;										//An image of the sprite moving left.
-	private Image right;									//An image of the sprite moving right.
-	private Image shield;									//An image of a shield.
-	private Image milk;										//An image of a boy holding a glass of milk.
+	private Image standingStill; // An image of the sprite when its not moving.
+	private Image left; // An image of the sprite moving left.
+	private Image right; // An image of the sprite moving right.
+	private Image shield; // An image of a shield.
+	private Image milk; // An image of a boy holding a glass of milk.
 
-	public Boolean goingLeft = false;						//True if the sprite is moving left.
-	public Boolean goingRight = false;						//True if the sprite is moving right.
-	public Boolean jump = false;							//True if the sprite is moving up.
-	public Boolean isCheating = false;						//True if a cheat is currently being used.
-	public Boolean hasBeenHit = false;						//True if the sprite is hit by a cookie.
-	public Boolean resetClicked = false;					//True if the level has been reset.
-	public Boolean skipLevelClicked = false;				//True if a level is skipped.
-	public Boolean sprint = false;							//True if the sprite is sprinting.
+	private Boolean goingLeft = false; // True if the sprite is moving left.
+	private Boolean goingRight = false; // True if the sprite is moving right.
+	private Boolean jump = false; // True if the sprite is moving up.
+	private Boolean isCheating = false; // True if a cheat is currently being
+										// used.
+	private Boolean hasBeenHit = false; // True if the sprite is hit by a cookie.
+	private Boolean resetClicked = false; // True if the level has been reset.
+	private Boolean skipLevelClicked = false; // True if a level is skipped.
+	private Boolean sprint = false; // True if the sprite is sprinting.
 
-	private Group pane;										//The current group being used by the application.
+	private Group pane; // The current group being used by the application.
 
-	private int level;										//The current game level
+	private int level; // The current game level
 
-	private Label cheatLabel;								//The label that lets the player know when a cheat is being used.
-	private Rectangle spriteBody;							//The rectangle that represents the sprite.
+	private Label cheatLabel; // The label that lets the player know when a
+								// cheat is being used.
+	private Rectangle spriteBody; // The rectangle that represents the sprite.
 
-	private Cookie collidedWithCookie; 						//The cookie the player collides with.
+	private Cookie collidedWithCookie; // The cookie the player collides with.
 
 	/**
 	 * Populates the information for the sprite.
-	 * @param Root: the current group the scene utilizes.
-	 * @param Level: The current level of the game.
+	 * 
+	 * @param Root
+	 *            : the current group the scene utilizes.
+	 * @param Level
+	 *            : The current level of the game.
 	 */
-	public void populateSprite(Group Root, int Level){
+	public void populateSprite(Group Root, int Level) {
 		level = Level;
 		spriteBody = new Rectangle(350, 710, 30, 40);
-		standingStill = new Image(getClass().getResourceAsStream("standing_still.png"));
+		standingStill = new Image(getClass().getResourceAsStream(
+				"standing_still.png"));
 		left = new Image(getClass().getResourceAsStream("walking_left_2.png"));
 		right = new Image(getClass().getResourceAsStream("walking_right_2.png"));
 		shield = new Image(getClass().getResourceAsStream("shield.jpg"));
@@ -64,12 +71,14 @@ public class Sprite{
 	}
 
 	/**
-	 * Updates the sprite per frame. 
-	 * @param scene: The current scene the game takes place in.
+	 * Updates the sprite per frame.
+	 * 
+	 * @param scene
+	 *            : The current scene the game takes place in.
 	 */
-	public void updateSprite(Scene scene){
+	public void updateSprite(Scene scene) {
 		activateKeyEvents(scene);
-		if (!isCheating){
+		if (!isCheating) {
 			if (level == 4) {
 				moveSprite(milk, milk, milk);
 			} else {
@@ -82,21 +91,25 @@ public class Sprite{
 
 	/**
 	 * Activates all the needed key commands to allow for game play.
-	 * @param scene: The current scene the game takes place in. 
+	 * 
+	 * @param scene
+	 *            : The current scene the game takes place in.
 	 */
-	public void activateKeyEvents(Scene scene) {
+	private void activateKeyEvents(Scene scene) {
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override public void handle(KeyEvent event) {
+			@Override
+			public void handle(KeyEvent event) {
 				if (event.getCode() == KeyCode.LEFT) {
 					goingLeft = true;
 				}
 				if (event.getCode() == KeyCode.RIGHT) {
-					goingRight = true;	
+					goingRight = true;
 				}
-				if (event.getCode() == KeyCode.SPACE || event.getCode() == KeyCode.UP) {
+				if (event.getCode() == KeyCode.SPACE
+						|| event.getCode() == KeyCode.UP) {
 					jump = true;
 				}
-				if (event.getCode() == KeyCode.SHIFT){
+				if (event.getCode() == KeyCode.SHIFT) {
 					sprint = true;
 				}
 				if (event.getCode() == KeyCode.C) {
@@ -105,24 +118,26 @@ public class Sprite{
 				if (event.getCode() == KeyCode.P) {
 					resetClicked = true;
 				}
-				if(event.getCode() == KeyCode.S) {
+				if (event.getCode() == KeyCode.S) {
 					isCheating = true;
 					skipLevelClicked = true;
 				}
 			}
 		});
-		scene.setOnKeyReleased(new EventHandler<KeyEvent>(){
-			@Override public void handle(KeyEvent event) {
+		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
 				if (event.getCode() == KeyCode.LEFT) {
 					goingLeft = false;
 				}
 				if (event.getCode() == KeyCode.RIGHT) {
-					goingRight = false;	
+					goingRight = false;
 				}
-				if (event.getCode() == KeyCode.SPACE || event.getCode() == KeyCode.UP) {
+				if (event.getCode() == KeyCode.SPACE
+						|| event.getCode() == KeyCode.UP) {
 					jump = false;
 				}
-				if (event.getCode() == KeyCode.SHIFT){
+				if (event.getCode() == KeyCode.SHIFT) {
 					sprint = false;
 				}
 			}
@@ -130,54 +145,54 @@ public class Sprite{
 	}
 
 	/**
-	 * Moves the sprite according to what commands hav been issued by the player.
+	 * Moves the sprite according to what commands hav been issued by the
+	 * player.
 	 */
-	public void moveSprite(Image left, Image right, Image standingStill) {
-		if(goingLeft) {
+	private void moveSprite(Image left, Image right, Image standingStill) {
+		if (goingLeft) {
 			setSpriteImage(left);
 			if (sprint) {
 				sprintLeft();
 			} else {
 				moveLeft();
 			}
-			if (jump){
+			if (jump) {
 				jumpUp();
 			} else {
 				fall();
 			}
-		}
-		else if(goingRight) {
+		} else if (goingRight) {
 			setSpriteImage(right);
 			if (sprint) {
 				sprintRight();
 			} else {
 				moveRight();
 			}
-			if (jump){
+			if (jump) {
 				jumpUp();
 			} else {
 				fall();
 			}
-		}
-		else if(jump){
+		} else if (jump) {
 			jumpUp();
-		}
-		else {
+		} else {
 			setSpriteImage(standingStill);
 			fall();
 		}
 	}
-	
+
 	/**
 	 * Handles a collision with a cookie depending on the level.
-	 * @param cookie: The cookie the player collides with.
+	 * 
+	 * @param cookie
+	 *            : The cookie the player collides with.
 	 */
-	public void handleCookieCollision(Cookie cookie){
+	public void handleCookieCollision(Cookie cookie) {
 		if (cookie.cookieBody.intersects(getSpriteBoundingBox())) {
-			if(!isCheating) {
+			if (!isCheating) {
 				hasBeenHit = true;
-			} 
-			if(level == 4){
+			}
+			if (level == 4) {
 				collidedWithCookie = cookie;
 			}
 		}
@@ -186,8 +201,8 @@ public class Sprite{
 	/**
 	 * Activates the CheatShield, which does not allow for collisions.
 	 */
-	public void activateCheatShield(){
-		if(!isCheating) {
+	private void activateCheatShield() {
+		if (!isCheating) {
 			isCheating = true;
 			createLabel("CHEATIN' HARD! SHIELD ON!!", 3, 100, 100, pane);
 		} else {
@@ -198,106 +213,147 @@ public class Sprite{
 
 	/**
 	 * Creates a label.
-	 * @param content: The physical message of the label.
-	 * @param font_size: The size of the font.
-	 * @param x_pos_shift: The amount the label is shifted to the right.
-	 * @param y_pos_shift: The amount the label is shifted down:
-	 * @param pane: The current group the scene is using.
+	 * 
+	 * @param content
+	 *            : The physical message of the label.
+	 * @param font_size
+	 *            : The size of the font.
+	 * @param x_pos_shift
+	 *            : The amount the label is shifted to the right.
+	 * @param y_pos_shift
+	 *            : The amount the label is shifted down:
+	 * @param pane
+	 *            : The current group the scene is using.
 	 * @return
 	 */
-	private Label createLabel(String content, int font_size, int x_pos_shift, int y_pos_shift, Group pane){
+	private Label createLabel(String content, int font_size, int x_pos_shift,
+			int y_pos_shift, Group pane) {
 		cheatLabel = new Label();
 		cheatLabel.setText(content);
-		cheatLabel.setStyle("-fx-font-size: "+font_size+"em;");
+		cheatLabel.setStyle("-fx-font-size: " + font_size + "em;");
 		cheatLabel.setLayoutX(x_pos_shift);
 		cheatLabel.setLayoutY(y_pos_shift);
 		cheatLabel.setTextFill(Color.BLACK);
 		pane.getChildren().add(cheatLabel);
 		return cheatLabel;
 	}
-	
-	private BoundingBox getSpriteBoundingBox(){
-		return new BoundingBox(getBoundMinX(), getBoundMinY(), getBoundWidth(), getBoundHeight());
+
+	/**
+	 * Creates a new bounding box for the sprite.
+	 * 
+	 * @return: Returns a new bounding box for the sprite.
+	 */
+	private BoundingBox getSpriteBoundingBox() {
+		return new BoundingBox(getBoundMinX(), getBoundMinY(), getBoundWidth(),
+				getBoundHeight());
 	}
-	
-	private double getBoundWidth(){
+
+	/**
+	 * Gets a new width for the bounding box.
+	 * 
+	 * @return: A new bounding box width.
+	 */
+	private double getBoundWidth() {
 		return spriteBody.getWidth() - 10;
 	}
-	
-	private double getBoundHeight(){
+
+	/**
+	 * Gets a new height for the bounding box.
+	 * 
+	 * @return: A new bounding box height.
+	 */
+	private double getBoundHeight() {
 		return spriteBody.getHeight() - 10;
 	}
-	
-	private double getBoundMinX(){
+
+	/**
+	 * Gets a new x value for the bounding box.
+	 * 
+	 * @return: A new min value of x.
+	 */
+	private double getBoundMinX() {
 		return spriteBody.getX() + 10;
 	}
-	
-	private double getBoundMinY(){
+
+	/**
+	 * Gets a new y value for the bounding box.
+	 * 
+	 * @return: A new min value of y.
+	 */
+	private double getBoundMinY() {
 		return spriteBody.getY() + 10;
 	}
-	
+
 	/**
 	 * Sets the image of the sprite.
-	 * @param image: The new image.
+	 * 
+	 * @param image
+	 *            : The new image.
 	 */
 	private void setSpriteImage(Image image) {
 		spriteBody.setFill(new ImagePattern(image));
 	}
-	
+
 	/**
 	 * Removes the cheat label from the scene
 	 */
 	public void removeLabel(Group pane) {
 		pane.getChildren().remove(cheatLabel);
 	}
-	
+
 	/**
 	 * Has the sprite move left 3 pixels per frame.
 	 */
-	private void moveLeft(){
-		if (spriteBody.getX() >= 0) spriteBody.setX(spriteBody.getX()-3);
+	private void moveLeft() {
+		if (spriteBody.getX() >= 0)
+			spriteBody.setX(spriteBody.getX() - 3);
 	}
-	
+
 	/**
 	 * Has the sprite move right 3 pixels per frame.
 	 */
-	private void moveRight(){
-		if (spriteBody.getX() <= 720) spriteBody.setX(spriteBody.getX()+3);
+	private void moveRight() {
+		if (spriteBody.getX() <= 720)
+			spriteBody.setX(spriteBody.getX() + 3);
 	}
-	
+
 	/**
 	 * Has the sprite move up 3 pixels per frame.
 	 */
-	private void jumpUp(){
-		if (spriteBody.getY() >= 0) spriteBody.setY(spriteBody.getY()-3);
+	private void jumpUp() {
+		if (spriteBody.getY() >= 0)
+			spriteBody.setY(spriteBody.getY() - 3);
 	}
-	
+
 	/**
 	 * Has the sprite move down 3 pixels per frame.
 	 */
-	private void fall(){
-		if (spriteBody.getY() <= 710) spriteBody.setY(spriteBody.getY()+3);
+	private void fall() {
+		if (spriteBody.getY() <= 710)
+			spriteBody.setY(spriteBody.getY() + 3);
 	}
-	
+
 	/**
 	 * Has the sprite move left 6 pixels per frame.
 	 */
-	private void sprintLeft(){
-		if (spriteBody.getX() >= 0) spriteBody.setX(spriteBody.getX()-6);
+	private void sprintLeft() {
+		if (spriteBody.getX() >= 0)
+			spriteBody.setX(spriteBody.getX() - 6);
 	}
-	
+
 	/**
 	 * Has the sprite move right 6 pixels per frame.
 	 */
-	private void sprintRight(){
-		if (spriteBody.getX() <= 720) spriteBody.setX(spriteBody.getX()+6);
+	private void sprintRight() {
+		if (spriteBody.getX() <= 720)
+			spriteBody.setX(spriteBody.getX() + 6);
 	}
-	
+
 	/**
 	 * 
 	 * @return: Returns where or not the player has been hit.
 	 */
-	public boolean getHasBeenHit(){
+	public boolean getHasBeenHit() {
 		return hasBeenHit;
 	}
 
@@ -305,7 +361,7 @@ public class Sprite{
 	 * 
 	 * @return: Returns whether or not the reset button has been clicked.
 	 */
-	public boolean getResetClicked(){
+	public boolean getResetClicked() {
 		return resetClicked;
 	}
 
@@ -313,15 +369,15 @@ public class Sprite{
 	 *
 	 * @return: Returns whether or not the skip level button has been clicked.
 	 */
-	public boolean getSkipLevelClicked(){
+	public boolean getSkipLevelClicked() {
 		return skipLevelClicked;
 	}
 
 	/**
 	 *
-	 * @return: Returns whether or not the player is "cheating". 
+	 * @return: Returns whether or not the player is "cheating".
 	 */
-	public boolean getisCheating(){
+	public boolean getisCheating() {
 		return isCheating;
 	}
 
@@ -329,31 +385,34 @@ public class Sprite{
 	 * 
 	 * @return: Returns the cookie the player collided with.
 	 */
-	public Cookie getCollidedWithCookie(){
+	public Cookie getCollidedWithCookie() {
 		return collidedWithCookie;
 	}
-	
+
 	/**
 	 * 
-	 * @return: Returns the horizontal position of the top right corner of the sprite.
+	 * @return: Returns the horizontal position of the top right corner of the
+	 *          sprite.
 	 */
-	public double getSpriteXPosition(){
+	public double getSpriteXPosition() {
 		return spriteBody.getX();
 	}
-	
+
 	/**
 	 * 
 	 * @return: Returns the pixel width of the sprite.
 	 */
-	public double getSpriteWidth(){
+	public double getSpriteWidth() {
 		return spriteBody.getWidth();
 	}
 
 	/**
 	 * Sets the value of whether or not the player has been hit;
-	 * @param bool: True if the player has been hit.
+	 * 
+	 * @param bool
+	 *            : True if the player has been hit.
 	 */
-	public void setHasBeenHit(boolean bool){
+	public void setHasBeenHit(boolean bool) {
 		hasBeenHit = bool;
 	}
 }
