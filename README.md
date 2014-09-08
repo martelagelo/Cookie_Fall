@@ -1,3 +1,28 @@
+##Name: 
+Michael Deng
+
+##Date Started:
+August 28th, 2014.
+
+##Date Ended:
+September 4th, 2014.
+
+##Role in Project:
+Designer, Creator, and Editor.
+
+##Resources used:
+Stack overflow.
+
+##Files used to start the project:
+Main.java
+GameLoop.java
+
+##Files used to test the project:
+None
+
+##Resources required by the project:
+None
+
 ##Genre: 
 2-D Scrolling Platformer
 
@@ -19,3 +44,7 @@ There will be 4 levels to my game and the first 3 levels will be differentiated 
 ##Cheats:
 Press 'c' to activate the shield cheat, which allows cookies to pass through the sprite without activating the hit event.
 Press 's' to skip a level.
+
+
+##Impression of Assignment:
+I really enjoyed coding the game, which I honestly found really very refreshing. Learning JavaFx syntax for the first time was a bit slow and tedious, but once I picked up the language I enjoyed coding the different functionalities of the game. I finished the majority of the game by Tuesday so I believe the amount of time we had was adequate.

@@ -28,6 +28,8 @@ import javafx.util.Duration;
 /**
  * Date Created: 8/30/2014 VERSION: 2
  * 
+ * Part of this file is part of my masterpiece.
+ * 
  * @author Michael Deng
  *
  */
@@ -42,10 +44,10 @@ class GameLoop {
 																// number of
 																// cookies each
 																// level.
-	private static final Integer STARTTIME = 120; // A constant of two minutes
+	private static final Integer STARTTIME = 10; // A constant of two minutes
 													// (120 seconds) for each
 													// level.
-	private static final Integer LEVEL_FOUR_GOAL = 250; // The amount of cookies
+	private static final Integer LEVEL_FOUR_GOAL = 20; // The amount of cookies
 														// needed to be caught
 														// to win level 4.
 	private Integer time_Seconds = STARTTIME; // A copy of STARTTIME that is
@@ -295,35 +297,51 @@ class GameLoop {
 	 * Checks what event caused the game to stop and handles the event.
 	 */
 	private void checkForEvents() {
-		// If the game is succesfully won.
-		if (cookieCounter >= LEVEL_FOUR_GOAL || level >= 5) {
+		if (gameWin()) {
 			Button btnFinishGame = createButton(
 					"Congratulations!! You have beaten the game!", 200, 350);
 			activateExitAppButton(btnFinishGame);
 		}
-		// If the player loses on the 4th level.
-		else if (cookieCounter <= LEVEL_FOUR_GOAL && time_Seconds <= 0) {
+		else if (levelFourLoss()) {
 			Button btnRestart = createButton(
 					"You didn't get enough cookies... restart?", 200, 350);
 			activateNextLevelButton(btnRestart);
 		}
-		// If the player gets hit on the first 3 levels.
-		else if (player.getHasBeenHit()) {
+		else if (playerHit()) {
 			Button btnRestart = createButton("You've been hit... restart?",
 					250, 350);
 			activateNextLevelButton(btnRestart);
 		}
-		// If the player passes each of the first 3 levels.
-		else if (time_Seconds <= 0) {
+		else if (levelPassed()) {
 			level++;
 			Button btnNextLevel = createButton("Good Job! Continue?", 280, 350);
 			activateNextLevelButton(btnNextLevel);
 		} else {
-			if (player.getisCheating()) {
+			if (playerCheating()) {
 				level++;
 			}
 			refreshGameScene();
 		}
+	}
+	
+	private boolean gameWin(){
+		return cookieCounter >= LEVEL_FOUR_GOAL || level >= 5;
+	}
+	
+	private boolean levelFourLoss(){
+		return cookieCounter <= LEVEL_FOUR_GOAL && time_Seconds <= 0 && level==4;
+	}
+	
+	private boolean playerHit(){
+		return player.getHasBeenHit();
+	}
+	
+	private boolean levelPassed(){
+		return time_Seconds <= 0;
+	}
+	
+	private boolean playerCheating() {
+		return player.getisCheating();
 	}
 
 	/**
